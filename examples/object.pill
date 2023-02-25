@@ -1,0 +1,11 @@
+import Process
+import Windows
+import "examples/test.pill"
+
+export const obj = {
+  name: "John",
+  age: 30,
+  func: fn() {
+    Process.write("Hello, world!")
+  }
+}

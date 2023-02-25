@@ -1,0 +1,7 @@
+fn add(x, y) {
+  return x + y
+}
+
+fn sub(x, y) {
+  return x - y
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Pillar",
+  "version": "0.1.0",
+  "author": "Hokanosekai, Zyksa",
+  "description": "Pillar a modern Rubber Ducky Language",
+  "license": "GPL 3",
+  "repository": {
+    "type": "git",
+    "url": ""
+  }
+}

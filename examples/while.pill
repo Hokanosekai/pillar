@@ -1,0 +1,22 @@
+import Process
+import "examples/test.pill"
+
+fn main() {
+  let i = 0
+  while (i < 10) {
+    if (i == 5) {
+      break
+    }
+    Process.write(i)
+    i += 1
+  }
+}
+
+const x 
+
+const y = add(1, 2)
+Process.wait(y * 1000)
+
+Process.write(sub(2, 3))
+
+main()

@@ -1,0 +1,27 @@
+import Process
+import Keyboard
+
+const Windows = {
+  powershell: fn(cmd) {
+    Keyboard.press(Keys.Gui, Keys.R)
+    Process.wait(500)
+    Process.write("powershell " + cmd)
+    Process.wait(500)
+    Keyboard.press(Keys.Enter)
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

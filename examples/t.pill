@@ -1,0 +1,14 @@
+import "examples/windows.pill"
+
+fn main() {
+  Windows.powershell("echo test")
+}
+
+main()
+
+
+
+
+
+
+

@@ -1,0 +1,6 @@
+import Keyboard
+
+Keyboard.press(Keys.Ctrl, Keys.Enter)
+
+// Output:
+// CTRL ENTER
