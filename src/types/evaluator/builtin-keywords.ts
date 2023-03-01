@@ -4,4 +4,5 @@ export enum BuiltInKeyword {
   // Modules
   Process     = "Process",
   Keyboard    = "Keyboard",
+  Windows     = "Windows",
 }

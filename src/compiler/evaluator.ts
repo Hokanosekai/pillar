@@ -113,21 +113,21 @@ export class Evaluator {
     }
   }
 
-  private evaluateImportDeclarationName(node: NameExpressionSyntax, env: Environment): RuntimeValue {
+  private evaluateImportDeclarationName(node: NameExpressionSyntax, _env: Environment): RuntimeValue {
     if (!this.isBuiltInFunction(node.identifier.text!)) {
       this.diagnostic.reportInvalidImportDeclaration(node);
     }
 
-    if (env.hasVariable(node.identifier.text!)) {
-      return env.resolveVariable(node.identifier.text!)!;
+    if (_env.hasVariable(node.identifier.text!)) {
+      return _env.resolveVariable(node.identifier.text!)!;
     }
 
     switch (node.identifier.text) {
       case BuiltInKeyword.Process:
-        return env.declareVariable(node.identifier.text!, Process);
+        return _env.declareVariable(node.identifier.text!, Process);
       case BuiltInKeyword.Keyboard:
-        env.declareVariable("Keys", Keys); // Add Keys to the environment
-        return env.declareVariable(node.identifier.text!, Keyboard);
+        _env.declareVariable("Keys", Keys); // Add Keys to the environment
+        return _env.declareVariable(node.identifier.text!, Keyboard);
       default:
         this.diagnostic.reportInvalidImportDeclaration(node);
         return Runtime.MK_NULL();
@@ -138,15 +138,20 @@ export class Evaluator {
     node: LiteralExpressionSyntax, 
     _env: Environment
   ): Promise<RuntimeValue> {
-    const path    = node.literal.value!;
+    const path    = (node.literal.value! as string);
     console.log(`Importing ${path}...`);
+
+    if (!path.endsWith(".pill")) {
+      this.diagnostic.reportInvalidImportDeclaration(node);
+      return Runtime.MK_NULL();
+    }
 
     const env     = _env.createChild();
     const file    = await Deno.readTextFile(`${Deno.cwd()}/${path}`)
     const ast     = new Parser(file).parse();
     const ev      = new Evaluator(ast.root, env); 
     const result  = await ev.evaluate(ast.root, env) as RuntimeValue;
-  
+
     this.diagnostic.merge(ev.diagnostic);
     this._environment.merge(env);
 

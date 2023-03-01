@@ -36,7 +36,6 @@ export class Pillar {
 
     // Parse the source code
     const {root, diagnostic} = this._parser.parse();
-    this._parser.print(root);
     this._diagnostic.merge(diagnostic);
 
     if (this._diagnostic.hasErrors()) {
@@ -60,8 +59,6 @@ export class Pillar {
     this._writer = new Writer(this._target, emitter.result);
     await this._writer.write();
 
-    const emitterResult = emitter.result.join("");
-
     this._diagnostic.merge(emitter.diagnostic);
 
     if (this._diagnostic.hasErrors()) {
@@ -69,7 +66,8 @@ export class Pillar {
       Deno.exit(1);
     }
 
-    console.log(emitterResult);
     console.log("Done!");
+    console.log(`Your program has been compiled to ${this._target}!`);
+    console.log(`You can now upload it on your Flipper Zero`);
   }
 }

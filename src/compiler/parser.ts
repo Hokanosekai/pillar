@@ -392,8 +392,6 @@ export class Parser {
       ? this.parseExpression()
       : null;
 
-    console.log(constant, keyword, identifier, equals, initializer);
-
     if (constant && (!initializer && !equals)) {
       this.diagnostic.reportUnexpectedConstantInitializer(identifier);
     }
@@ -487,7 +485,7 @@ export class Parser {
   private parsePrimaryExpression(): ExpressionSyntax {
     switch (this.current().kind) {
       case SyntaxKind.LeftBraceToken:         return this.parseObjectLiteralExpression();
-    
+
       case SyntaxKind.FalseKeyword:
       case SyntaxKind.TrueKeyword:             return this.parseBooleanLiteral();
 
@@ -595,7 +593,7 @@ export class Parser {
     const keyword = isTrue
       ? this.match(SyntaxKind.TrueKeyword)
       : this.match(SyntaxKind.FalseKeyword);
-    
+
     return {
       kind:    SyntaxKind.LiteralExpression,
       literal: keyword,

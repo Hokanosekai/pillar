@@ -14,7 +14,6 @@ export class DiagnosticMessage {
   ) {}
 
   public print() {
-    console.log(this);
     console.log(`[${this.type}] ${this.message} \n\tat line ${this.location.line}, col ${this.location.column}\n`);
   }
 

@@ -1,21 +1,18 @@
 // deno-lint-ignore-file
 import args from "https://deno.land/x/args@2.1.1/wrapper.ts"
-import { EarlyExitFlag, PartialOption } from "https://deno.land/x/args@2.1.1/flag-types.ts";
+import { EarlyExitFlag, Option, PartialOption } from "https://deno.land/x/args@2.1.1/flag-types.ts";
 import { Text } from "https://deno.land/x/args@2.1.1/value-types.ts"
 import { Pillar } from "./pillar.ts";
-import { MAIN_COMMAND } from "https://deno.land/x/args@2.1.1/symbols.ts";
+import { MAIN_COMMAND, PARSE_FAILURE } from "https://deno.land/x/args@2.1.1/symbols.ts";
+import packageJson from "../package.json" assert { type: "json" };
 
 export class Cli {
   private _pkg:     any;
   private _parser:  any;
   private _pillar?: Pillar;
 
-  constructor() {
-    this.init();
-  }
-
   public async init() {
-    this._pkg     = JSON.parse(await Deno.readTextFile("./package.json"));
+    this._pkg     = packageJson;
     this._parser  = this.createParser();
   }
 
@@ -33,6 +30,14 @@ export class Cli {
 
   private createParser() {
     const version = this._pkg.version;
+
+    const globalOptions = args
+      .with(Option('input', {
+        alias: ['i'],
+        describe: 'The input file',
+        type: Text,
+      }))
+
     const parser  = args
       .describe("Pillar CLI v" + version)
       .with(
@@ -45,6 +50,19 @@ export class Cli {
           }
         })
       )
+      .sub(
+        'run',
+        globalOptions,
+      )
+      .sub(
+        'compile',
+        globalOptions
+          .with(Option('output', {
+            alias: ['o'],
+            describe: 'The output file',
+            type: Text,
+          }))
+      )
       .with(
         EarlyExitFlag('version', {
           alias: ['v'],
@@ -54,22 +72,6 @@ export class Cli {
             return Deno.exit(0);
           }
         })
-      )
-      .with(
-        PartialOption('input', {
-          alias: ['i'],
-          describe: 'The input file to compile',
-          default: 'unknown',
-          type: Text,
-        })
-      )
-      .with(
-        PartialOption('output', {
-          alias: ['o'],
-          describe: 'The output file to write to',
-          default: 'unknown',
-          type: Text,
-        })
       );
 
     return parser;
@@ -78,6 +80,26 @@ export class Cli {
   public async run(args: string[]) {
     const res               = this._parser.parse(args);
 
+    switch (res.tag) {
+      case PARSE_FAILURE:
+        console.error(res.error.toString());
+        Deno.exit(1);
+      case MAIN_COMMAND:
+        console.log("No command specified.");
+        console.log(this._parser.help());
+        Deno.exit(1);
+      case 'run':
+        console.log("Running...");
+        break;
+      case 'compile':
+        console.log("Compiling...");
+        break;
+      default:
+        console.log("Unknown command:", res.tag);
+        console.log(this._parser.help());
+        Deno.exit(1);
+    }
+    
     if (res.tag !== MAIN_COMMAND) {
       console.log(this._parser.help());
       Deno.exit(1);
@@ -91,7 +113,7 @@ export class Cli {
     const { input, output } = res.value;
     this._pillar            = new Pillar(output);
     const source            = await Deno.readTextFile(input);
-    
+
     await this._pillar?.start(source);
 
     if (this._pillar?.diagnostic.hasErrors()) {
