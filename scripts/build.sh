@@ -4,7 +4,11 @@
 echo "Compiling for $(uname -s)..."
 echo ""
 
-deno compile -A --unstable --reload --output ./bin/pillar-$(uname -s) ./src/main.ts --target x86_64-pc-windows-msvc
+# if platform is windows, use .exe extension
+if [ "$(uname -s)" = "Windows" ]; then
+  deno compile -A --unstable --reload --output ./bin/pillar-$(uname -s).exe ./src/main.ts
+else
+  deno compile -A --unstable --reload --output ./bin/pillar-$(uname -s) ./src/main.ts
 
 echo ""
 echo "Done."

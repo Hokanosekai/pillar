@@ -4,4 +4,4 @@
 
 # Run Lexer tests
 echo "Running Lexer tests..."
-deno test -A --unstable ./src//tests/lexer.test.ts
+deno test

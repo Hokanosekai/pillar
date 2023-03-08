@@ -401,7 +401,7 @@ export class Parser {
       constant:    constant,
       keyword:     keyword,
       identifier:  identifier,
-      equalsToken: equals,
+      equals:      equals,
       initializer: initializer,
     } as VariableDeclarationSyntax;
   }

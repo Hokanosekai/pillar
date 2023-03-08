@@ -9,7 +9,6 @@ import { SyntaxToken } from "../types/lexer/syntax-token.ts";
  * @license GPL-3.0
  * @version 0.1.0
  * @since 0.1.0
- * @packageDocumentation
  * @module lexer
  */
 
