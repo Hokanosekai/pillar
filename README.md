@@ -30,7 +30,7 @@ You can download the latest release [here]().
 
 ### Build from source
 
-#### Linux / macOS
+#### Linux / Mac OS / Windows
 
 ```
 git clone
@@ -42,6 +42,8 @@ Then, you can build the sources for your platform using the following command:
 ```
 make build
 ```
+
+#### Linux / Mac OS
 
 And to install it on your system, run:
 
@@ -56,16 +58,6 @@ To uninstall it, run:
 ```
 make uninstall
 ```
-
-#### Windows
-
-You can build the sources for Windows using the following command:
-
-```
-make build-windows
-```
-
-Or you can just download the latest release [here]().
 
 ### Finish
 
