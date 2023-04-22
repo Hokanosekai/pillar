@@ -76,7 +76,7 @@ You can now run the program by typing `pillar` in your terminal.
 ### Command line
 
 ```
-pillar -i <file> -o <file>
+pillar compile -i <file> -o <file>
 ```
 
 #### Options
