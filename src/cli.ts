@@ -5,6 +5,7 @@ import { Text } from "https://deno.land/x/args@2.1.1/value-types.ts"
 import { Pillar } from "./pillar.ts";
 import { MAIN_COMMAND, PARSE_FAILURE } from "https://deno.land/x/args@2.1.1/symbols.ts";
 import packageJson from "../package.json" assert { type: "json" };
+import { PillarRepl } from "./compiler/repl.ts";
 
 export class Cli {
   private _pkg:     any;
@@ -85,7 +86,6 @@ export class Cli {
         console.error(res.error.toString());
         Deno.exit(1);
       case MAIN_COMMAND:
-        console.log("Starting Pillar...");
         break;
       default:
         console.log("Unknown command:", res.tag);
@@ -97,6 +97,14 @@ export class Cli {
       console.log(this._parser.help());
       Deno.exit(1);
     }
+
+    if (res.value?.value === undefined) {
+      // Start REPL
+      const repl = new PillarRepl();
+      await repl.start();
+      return;
+    }
+
 
     const { input, output } = res.value.value;
     if (!input) {
@@ -122,11 +130,14 @@ export class Cli {
     if (behavior === 'compile') {
       console.log("Compiling...");
       await this._pillar.compile(source);
-    }
 
-    if (behavior === 'run') {
+    } else if (behavior === 'run') {
       console.log("Running...");
       await this._pillar.run(source);
+
     }
+
+    // Start REPL
+
   }
 }
