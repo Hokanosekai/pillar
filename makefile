@@ -41,6 +41,26 @@ build:
 	@echo ""
 	@echo "Done."
 
+build-all: build-windows build-linux build-macos
+
+build-windows:
+	@mkdir -p $(OUTPUT_DIR)
+	deno compile $(FLAGS) --output $(OUTPUT_DIR)/$(PROG_NAME)-${PROG_VERSION}-Windows.exe src/main.ts --target x86_64-pc-windows-msvc
+	@echo ""
+	@echo "Done."
+
+build-linux:
+	@mkdir -p $(OUTPUT_DIR)
+	deno compile $(FLAGS) --output $(OUTPUT_DIR)/$(PROG_NAME)-${PROG_VERSION}-Linux src/main.ts --target x86_64-unknown-linux-gnu
+	@echo ""
+	@echo "Done."
+
+build-macos:
+	@mkdir -p $(OUTPUT_DIR)
+	deno compile $(FLAGS) --output $(OUTPUT_DIR)/$(PROG_NAME)-${PROG_VERSION}-Darwin src/main.ts --target x86_64-apple-darwin
+	@echo ""
+	@echo "Done."
+
 install:
 	@mkdir -p /usr/local/bin
 	@cp $(OUTPUT_FILE)$(EXTENSION) /usr/local/bin/$(PROG_NAME)
