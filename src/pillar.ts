@@ -30,7 +30,47 @@ export class Pillar {
     return this._parser;
   }
 
-  public async start(source: string) {
+  public async run(source: string) {
+    this._parser = new Parser(source);
+
+    // Parse the source code
+    const {root, diagnostic} = this._parser.parse();
+    this._diagnostic.merge(diagnostic);
+
+    if (this._diagnostic.hasErrors()) {
+      this._diagnostic.print();
+      Deno.exit(1);
+    }
+
+    const evaluator = new Evaluator(root, this._environment);
+    await evaluator.evaluate();
+
+    this._diagnostic.merge(evaluator.diagnostic);
+
+    if (this._diagnostic.hasErrors()) {
+      this._diagnostic.print();
+      Deno.exit(1);
+    }
+
+    const emitter = new Emitter(evaluator.result);
+    emitter.emit();
+
+    console.log("");
+    console.log(emitter.result.join(""));
+
+    this._diagnostic.merge(emitter.diagnostic);
+
+    if (this._diagnostic.hasErrors()) {
+      this._diagnostic.print();
+      Deno.exit(1);
+    } else {
+      console.log("No errors found.");
+    }
+
+    console.log("Done!");
+  }
+
+  public async compile(source: string) {
     console.log("Starting Pillar...");
     this._parser = new Parser(source);
 
@@ -64,6 +104,8 @@ export class Pillar {
     if (this._diagnostic.hasErrors()) {
       this._diagnostic.print();
       Deno.exit(1);
+    } else {
+      console.log("No errors found.");
     }
 
     console.log("Done!");

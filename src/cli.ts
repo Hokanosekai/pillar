@@ -80,18 +80,12 @@ export class Cli {
   public async run(args: string[]) {
     const res               = this._parser.parse(args);
 
-    //console.log(res.tag, MAIN_COMMAND);
-
     switch (res.tag) {
       case PARSE_FAILURE:
         console.error(res.error.toString());
         Deno.exit(1);
       case MAIN_COMMAND:
-      case 'run':
-        console.log("Running...");
-        break;
-      case 'compile':
-        console.log("Compiling...");
+        console.log("Starting Pillar...");
         break;
       default:
         console.log("Unknown command:", res.tag);
@@ -104,26 +98,35 @@ export class Cli {
       Deno.exit(1);
     }
 
-    //console.log(res, res.remaining().rawFlags());
-
-
-    /*if (res.remaining().rawFlags().length) {
-      console.error("Unknown flags:", ...res.remaining().rawFlags());
-      Deno.exit(1);
-    }*/
-
     const { input, output } = res.value.value;
-    //console.log(input, output);
+    if (!input) {
+      console.error("No input file specified.");
+      Deno.exit(1);
+    }
+
+    if (res.tag === 'compile' && !output) {
+      console.error("No output file specified.");
+      Deno.exit(1);
+    }
 
     this._pillar            = new Pillar(output);
     const source            = await Deno.readTextFile(input);
 
-    await this._pillar?.start(source);
+    let behavior: string    = 'compile';
+    res.consumedArgs.forEach((element: any) => {
+      if (element.raw === 'run' || element.raw === 'compile') {
+        behavior = element.raw;
+      }
+    });
 
-    if (this._pillar?.diagnostic.hasErrors()) {
-      this._pillar.diagnostic.print();
-    } else {
-      console.log("No errors found.");
+    if (behavior === 'compile') {
+      console.log("Compiling...");
+      await this._pillar.compile(source);
+    }
+
+    if (behavior === 'run') {
+      console.log("Running...");
+      await this._pillar.run(source);
     }
   }
 }
