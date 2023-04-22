@@ -5,11 +5,11 @@
 Pillar
 ====
 
-[![License](https://img.shields.io/github/license/Hokanosekai/pillar.svg)](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
-[![GitHub release](https://img.shields.io/github/release/Hokanosekai/pillar.svg)](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
-[![GitHub issues](https://img.shields.io/github/issues/Hokanosekai/pillar.svg)](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
-[![GitHub pull requests](https://img.shields.io/github/issues-pr/Hokanosekai/pillar.svg)](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
-[![Version](https://img.shields.io/badge/version-v0.1.1-blue)](https://img.shields.io/badge/version-v0.1.1-blue)
+![GitHub](https://img.shields.io/github/license/hokanosekai/pillar)
+![GitHub release (release name instead of tag name)](https://img.shields.io/github/v/release/hokanosekai/pillar?include_prereleases)
+![GitHub issues](https://img.shields.io/github/issues/hokanosekai/pillar)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/hokanosekai/pillar)
+![GitHub package.json version](https://img.shields.io/github/package-json/v/hokanosekai/pillar?color=blue)
 
 </div>
 
