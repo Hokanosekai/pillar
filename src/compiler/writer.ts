@@ -11,9 +11,19 @@ export class Writer {
       throw new Error("No target file specified");
     }
 
-    // Check if the target file exists and if it does, 
-    // ask the user if they want to overwrite it else create the file
-    if (Deno.statSync(this._target).isFile) {
+    let file;
+
+    try {
+      file = Deno.statSync(this._target);
+    } catch (e) {
+      if (e instanceof Deno.errors.NotFound) {
+        file = null;
+      } else {
+        throw e;
+      }
+    }
+
+    if (file?.isFile) {
       const overwrite = prompt(`File '${this._target}' already exists. Overwrite? (y/n)`);
       if (overwrite === "y") {
         Deno.removeSync(this._target);

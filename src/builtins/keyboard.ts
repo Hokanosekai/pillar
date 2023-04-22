@@ -35,7 +35,7 @@ export const KeyboardBuiltIn = {
     }
 
     return {
-      kind:      CompiledKind.CompiledNameExpressionSyntax,
+      kind: CompiledKind.CompiledNameExpressionSyntax,
       name: {
         kind:  CompiledKind.KEYS,
         text:  key,

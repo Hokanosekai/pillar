@@ -69,6 +69,10 @@ export class Emitter {
     this.emitCompilationUnit(root);
   }
 
+  private emitNewLine() {
+    this.result.push(`\r\n`);
+  }
+
   private emitCompilationUnit(node: CompiledUnitSyntax) {
     this.emitBody(node.body);
   }
@@ -79,7 +83,11 @@ export class Emitter {
         case CompiledKind.CompiledCallMemberSyntax:
           this.emitCallMember((node as CompiledCallMemberSyntax));
           break;
+        case CompiledKind.CompiledNameExpressionSyntax:
+          this.emitNameExpression((node as CompiledNameExpressionSyntax));
+          break;
       }
+      this.emitNewLine();
     }
   }
 
@@ -87,8 +95,6 @@ export class Emitter {
     this.emitNameExpression(node.callee);
     this.emitGap();
     this.emitLiteralExpression(node.argument);
-
-    this.result.push(`\r\n`);
   }
 
   private emitNameExpression(node: CompiledNameExpressionSyntax) {

@@ -1,6 +1,7 @@
 import { Keyboard } from "../builtins/keyboard.ts";
 import { Keys } from "../builtins/keys.ts";
 import { Process } from "../builtins/process.ts";
+import { Windows } from "../builtins/windows.ts";
 import { CompilationUnitSyntax } from "../types/ast/compilation-unit-syntax.ts";
 import { AssignmentExpressionSyntax, BinaryExpressionSyntax, CallExpressionSyntax, ExpressionSyntax, FunctionExpressionSyntax, LiteralExpressionSyntax, MemberAccessExpressionSyntax, NameExpressionSyntax, ObjectLiteralExpressionSyntax, ObjectLiteralPropertySyntax, ParenthesizedExpressionSyntax, UnaryExpressionSyntax } from "../types/ast/expressions-syntax.ts";
 import { FunctionDeclarationSyntax, ImportDeclarationSyntax } from "../types/ast/member-syntax.ts";
@@ -104,7 +105,7 @@ export class Evaluator {
   private async evaluateImportDeclaration(node: ImportDeclarationSyntax, env: Environment): Promise<RuntimeValue> {
     switch (node.identifier.kind) {
       case SyntaxKind.NameExpression:
-        return this.evaluateImportDeclarationName(node.identifier as NameExpressionSyntax, env);
+        return await this.evaluateImportDeclarationName(node.identifier as NameExpressionSyntax, env);
       case SyntaxKind.LiteralExpression:
         return await this.evaluateImportDeclarationLiteral(node.identifier as LiteralExpressionSyntax, env);
       default:
@@ -113,7 +114,7 @@ export class Evaluator {
     }
   }
 
-  private evaluateImportDeclarationName(node: NameExpressionSyntax, _env: Environment): RuntimeValue {
+  private async evaluateImportDeclarationName(node: NameExpressionSyntax, _env: Environment): Promise<RuntimeValue> {
     if (!this.isBuiltInFunction(node.identifier.text!)) {
       this.diagnostic.reportInvalidImportDeclaration(node);
     }
@@ -128,10 +129,39 @@ export class Evaluator {
       case BuiltInKeyword.Keyboard:
         _env.declareVariable("Keys", Keys); // Add Keys to the environment
         return _env.declareVariable(node.identifier.text!, Keyboard);
+      case BuiltInKeyword.Windows: {
+        await this.evaluateImportDeclarationLibrary(node, _env);
+        return _env.resolveVariable(node.identifier.text!)!;
+      }
       default:
         this.diagnostic.reportInvalidImportDeclaration(node);
         return Runtime.MK_NULL();
     }
+  }
+
+  private async evaluateImportDeclarationLibrary(node: NameExpressionSyntax, _env: Environment): Promise<RuntimeValue> {
+    const path    = (node.identifier.text! as string);
+    console.log(`Importing ${path}...`);
+
+    let file = "";
+    switch (path) {
+      case BuiltInKeyword.Windows:
+        file = Windows;
+        break;
+      default:
+        this.diagnostic.reportInvalidImportDeclaration(node);
+        return Runtime.MK_NULL();
+    }
+
+    const env     = _env.createChild();
+    const ast     = new Parser(file).parse();
+    const ev      = new Evaluator(ast.root, env); 
+    const result  = await ev.evaluate(ast.root, env) as RuntimeValue;
+
+    this.diagnostic.merge(ev.diagnostic);
+    this._environment.merge(env);
+
+    return result;
   }
 
   private async evaluateImportDeclarationLiteral(
@@ -140,6 +170,7 @@ export class Evaluator {
   ): Promise<RuntimeValue> {
     const path    = (node.literal.value! as string);
     console.log(`Importing ${path}...`);
+    console.log(Deno.cwd());
 
     if (!path.endsWith(".pill")) {
       this.diagnostic.reportInvalidImportDeclaration(node);

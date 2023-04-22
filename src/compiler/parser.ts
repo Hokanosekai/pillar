@@ -706,9 +706,11 @@ export class Parser {
     diagnostic: Diagnostic,
     root:       CompilationUnitSyntax,
   } {
+    const compilationUnit = this.parseCompilationUnit();
+    //this.print(compilationUnit);
     return {
       diagnostic: this.diagnostic,
-      root:       this.parseCompilationUnit(),
+      root:       compilationUnit,
     };
   }
 

@@ -1,7 +1,9 @@
-import "examples/windows.pill"
+import Windows
 
 fn main() {
   Windows.powershell("echo test")
+  Windows.shutdown()
+  Windows.volumeSet(50)
 }
 
 main()

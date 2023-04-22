@@ -80,14 +80,13 @@ export class Cli {
   public async run(args: string[]) {
     const res               = this._parser.parse(args);
 
+    //console.log(res.tag, MAIN_COMMAND);
+
     switch (res.tag) {
       case PARSE_FAILURE:
         console.error(res.error.toString());
         Deno.exit(1);
       case MAIN_COMMAND:
-        console.log("No command specified.");
-        console.log(this._parser.help());
-        Deno.exit(1);
       case 'run':
         console.log("Running...");
         break;
@@ -99,18 +98,23 @@ export class Cli {
         console.log(this._parser.help());
         Deno.exit(1);
     }
-    
+
     if (res.tag !== MAIN_COMMAND) {
       console.log(this._parser.help());
       Deno.exit(1);
     }
 
-    if (res.remaining().rawFlags().length) {
+    //console.log(res, res.remaining().rawFlags());
+
+
+    /*if (res.remaining().rawFlags().length) {
       console.error("Unknown flags:", ...res.remaining().rawFlags());
       Deno.exit(1);
-    }
+    }*/
 
-    const { input, output } = res.value;
+    const { input, output } = res.value.value;
+    //console.log(input, output);
+
     this._pillar            = new Pillar(output);
     const source            = await Deno.readTextFile(input);
 
