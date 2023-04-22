@@ -134,10 +134,9 @@ export class Cli {
     } else if (behavior === 'run') {
       console.log("Running...");
       await this._pillar.run(source);
-
+    } else {
+      console.error("Unknown behavior:", behavior);
+      Deno.exit(1);
     }
-
-    // Start REPL
-
   }
 }

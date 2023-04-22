@@ -1,4 +1,4 @@
-import { RuntimeString, RuntimeValue } from "./runtime-value.ts";
+import { RuntimeString } from "./runtime-value.ts";
 
 export enum CompiledKind {
   DELAY                           = "DELAY",

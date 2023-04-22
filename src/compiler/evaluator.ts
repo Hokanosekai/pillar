@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-prototype-builtins
 import { Keyboard } from "../builtins/keyboard.ts";
 import { Keys } from "../builtins/keys.ts";
 import { Process } from "../builtins/process.ts";
@@ -141,7 +142,7 @@ export class Evaluator {
 
   private async evaluateImportDeclarationLibrary(node: NameExpressionSyntax, _env: Environment): Promise<RuntimeValue> {
     const path    = (node.identifier.text! as string);
-    console.log(`Importing ${path}...`);
+    console.log(`Importing ${path}`);
 
     let file = "";
     switch (path) {

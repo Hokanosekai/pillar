@@ -71,7 +71,6 @@ export class Pillar {
   }
 
   public async compile(source: string) {
-    console.log("Starting Pillar...");
     this._parser = new Parser(source);
 
     // Parse the source code
@@ -108,8 +107,6 @@ export class Pillar {
       console.log("No errors found.");
     }
 
-    console.log("Done!");
-    console.log(`Your program has been compiled to ${this._target}!`);
-    console.log(`You can now upload it on your Flipper Zero`);
+    console.log("Done.");
   }
 }
