@@ -26,7 +26,7 @@ Pillar is a modern and easy to use language for writting Rubber Ducky scripts.
 
 ### Download the latest release
 
-You can download the latest release [here]().
+You can download the latest release [here](https://github.com/Hokanosekai/pillar/releases/tag/v0.1.2).
 
 ### Build from source
 
@@ -63,6 +63,12 @@ make uninstall
 
 You can now run the program by typing `pillar` in your terminal.
 
+## Extensions
+
+### VSCode
+
+You can find the extension [here](https://marketplace.visualstudio.com/items?itemName=pillar-lang.pillar-ext).
+
 ## Usage
 
 ### Command line
@@ -98,8 +104,6 @@ fn main() {
 
 main()
 ```
-
-There is no vscode extension for Pillar yet, but you can use the Rust extension.
 
 ## Examples
 
