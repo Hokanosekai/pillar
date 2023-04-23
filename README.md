@@ -71,13 +71,21 @@ You can find the extension [here](https://marketplace.visualstudio.com/items?ite
 
 ## Usage
 
-### Command line
+You can play with the REPL by typing `pillar` in your terminal.
+
+### Run
+
+```
+pillar run -i <file>
+```
+
+### Compile
 
 ```
 pillar compile -i <file> -o <file>
 ```
 
-#### Options
+### Options
 
 ```
 -h, --help
